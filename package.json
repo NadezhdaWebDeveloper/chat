@@ -22,7 +22,8 @@
   },
   "homepage": "https://github.com/NadezhdaWebDeveloper/chat#readme",
   "dependencies": {
+    "ejs": "*",
     "express": "3.21.2",
-    "ejs": "*"
+    "nconf": "^0.8.4"
   }
 }
