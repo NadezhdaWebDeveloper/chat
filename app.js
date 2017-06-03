@@ -8,23 +8,44 @@ var log = require('./libs/log')(module);
 
 var app = express();
 
-app.set('port', config.get('port'));
-
 // Middleware
-app.use(function(req, res, next) {
-  if (req.url == '/') {
-    res.end('index page');
-  } else {
-    next();
-  }
+app.engine('ejs', require('ejs-locals')); // layout partial block
+/*
+* layout - некоторое оформление, которое пишем в отдельный файл и в нем указываем, куда вставлять body.
+* Block - используются там, где надо задавать какое-то содержимое в отдельных шаблонах
+* Partial - подшаблон
+*/
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
+
+// all environments
+app.use(express.favicon()); // /favicon.ico
+
+if (app.get('env') == 'development') {
+  app.use(express.logger('dev'));
+} else {
+  app.use(express.logger('default'));
+}
+
+app.use(express.bodyParser()); // req.body....
+
+app.use(express.cookieParser()); // req.headers
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(app.router);
+
+app.get('/', function(req, res, next) {
+  // res.end('index page');
+  res.render('index');
 });
 
-app.use(function(req, res, next) {
-  if (req.url == '/cabinet') {
-    res.end('user\'s page');
-  } else {
-    next();
-  }
+app.get('/cabinet', function(req, res, next) {
+  res.end('user\'s page');
+});
+
+app.get('/cabinet', function(req, res, next) {
+  res.end('user\'s page');
 });
 
 app.use(function(req, res, next) {
@@ -57,18 +78,5 @@ http.createServer(app).listen(config.get('port'), function(){
   log.info('Express server listening on port ' + config.get('port'));
 });
 
-// // all environments
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'ejs');
-// app.use(express.favicon());
-// app.use(express.logger('dev'));
-// app.use(express.json());
-// app.use(express.urlencoded());
-// app.use(express.methodOverride());
-// app.use(express.session({ secret: 'your secret here' }));
-// app.use(app.router);
-// app.use(express.static(path.join(__dirname, 'public')));
-//
-//
 // app.get('/', routes.index);
 // app.get('/users', user.list);
