@@ -2,11 +2,9 @@ var express = require('express');
 var http = require('http');
 var path = require('path');
 var config = require('./config');
+var log = require('./libs/log')(module);
 // var routes = require('./routes');
 // var user = require('./routes/user');
-process.env.NODE_ENV = 'development';
-
-// console.log(config);
 
 var app = express();
 
@@ -50,14 +48,13 @@ app.use(function(err, req, res, next) {
     var errorHandler = express.errorHandler();
     errorHandler(err, req, res, next);
   } else {
-    console.log(app.get('env'));
     res.send(500);
   }
 });
 
 // Creating server
 http.createServer(app).listen(config.get('port'), function(){
-  console.log('Express server listening on port ' + config.get('port'));
+  log.info('Express server listening on port ' + config.get('port'));
 });
 
 // // all environments
