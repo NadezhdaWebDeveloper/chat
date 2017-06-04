@@ -3,6 +3,7 @@ var http = require('http');
 var path = require('path');
 var config = require('./config');
 var log = require('./libs/log')(module);
+var mongoose = require('./libs/mongoose');
 var HttpError = require('./error').HttpError;
 // var routes = require('./routes');
 // var user = require('./routes/user');
@@ -31,6 +32,23 @@ if (app.get('env') == 'development') {
 app.use(express.bodyParser()); // req.body....
 
 app.use(express.cookieParser()); // req.headers
+
+var MongoStore = require('connect-mongo')(express);
+
+app.use(express.session({
+  secret: config.get('session:secret'),
+  key: config.get('session:key'),
+  cookie: config.get('session:cookie'),
+  store: new MongoStore({ mongooseConnection: mongoose.connection })
+}));
+// Как только пользователь заходит на сайт
+// ему устанавливается cookie - connect.sid - название по-умолчанию
+// Это название можно изменить -> config.json
+
+app.use(function(req, res, next) {
+  req.session.numberOfVisits = req.session.numberOfVisits + 1 || 1;
+  res.send('Visits: ' + req.session.numberOfVisits);
+});
 
 app.use(require('./middleware/sendHttpError'));
 
