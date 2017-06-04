@@ -1,7 +1,7 @@
 // Winston wrapper
 
 var winston = require('winston');
-process.env.NODE_ENV = 'development';
+process.env.NODE_ENV = 'development'; // NODE_ENV == 'production' - по умолчанию
 var ENV = process.env.NODE_ENV;
 
 function getLogger(module){

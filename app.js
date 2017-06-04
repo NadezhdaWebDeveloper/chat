@@ -3,6 +3,7 @@ var http = require('http');
 var path = require('path');
 var config = require('./config');
 var log = require('./libs/log')(module);
+var HttpError = require('./error').HttpError;
 // var routes = require('./routes');
 // var user = require('./routes/user');
 
@@ -31,6 +32,8 @@ app.use(express.bodyParser()); // req.body....
 
 app.use(express.cookieParser()); // req.headers
 
+app.use(require('./middleware/sendHttpError'));
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(app.router);
@@ -39,15 +42,23 @@ require('./routes')(app);
 
 // Функция-обработчик ошибок - функция с четырьмя параметрами
 app.use(function(err, req, res, next) {
-  // NODE_ENV == 'production' - по умолчанию
 
-  // development only
-  if ('development' == app.get('env')) {
-    var errorHandler = express.errorHandler();
-    errorHandler(err, req, res, next);
-  } else {
-    res.send(500);
+  if (typeof err == 'number' ) {
+    err = new HttpError(err);
   }
+
+  if (err instanceof HttpError) {
+    res.sendHttpError(err);
+  } else {
+    if (app.get('env') == 'development') {
+      express.errorHandler()(err, req, res, next);
+    } else {
+      log.error(err);
+      err = new HttpError(500);
+      res.sendHttpError(err);
+    }
+  }
+
 });
 
 // Creating server
