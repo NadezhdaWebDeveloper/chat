@@ -35,30 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(app.router);
 
-app.get('/', function(req, res, next) {
-  // res.end('index page');
-  res.render('index');
-});
-
-app.get('/cabinet', function(req, res, next) {
-  res.end('user\'s page');
-});
-
-app.get('/cabinet', function(req, res, next) {
-  res.end('user\'s page');
-});
-
-app.use(function(req, res, next) {
-  if (req.url == '/forbidden') {
-    next(new Error('Opps, denied!'));
-  } else {
-    next();
-  }
-});
-
-app.use(function(req, res) {
-  res.send(404, 'Page not found. Sorry!');
-});
+require('./routes')(app);
 
 // Функция-обработчик ошибок - функция с четырьмя параметрами
 app.use(function(err, req, res, next) {
