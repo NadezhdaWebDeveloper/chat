@@ -45,10 +45,11 @@ app.use(express.session({
 // ему устанавливается cookie - connect.sid - название по-умолчанию
 // Это название можно изменить -> config.json
 
-app.use(function(req, res, next) {
-  req.session.numberOfVisits = req.session.numberOfVisits + 1 || 1;
-  res.send('Visits: ' + req.session.numberOfVisits);
-});
+// test for checking session work
+// app.use(function(req, res, next) {
+//   req.session.numberOfVisits = req.session.numberOfVisits + 1 || 1;
+//   res.send('Visits: ' + req.session.numberOfVisits);
+// });
 
 app.use(require('./middleware/sendHttpError'));
 

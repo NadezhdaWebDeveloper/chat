@@ -9,11 +9,16 @@
 
 module.exports = function(app) {
 
+  app.get('/', function(req, res, next) { res.render('index'); });
+
   require('./user')(app);
 
-  app.get('/', function(req, res, next) {
-    res.render('index');
-  });
+  app.get('/login', require('./login').get);
+  app.post('/login', require('./login').post);
+
+  app.get('/chat', require('./chat').get);
+
+  app.get('/cabinet', function(req, res, next) { res.end('user\'s cabinet'); });
 
   app.get('/forbidden', function(req, res, next) {
     next(new Error('Opps, denied!'));

@@ -34,8 +34,4 @@ module.exports = function(app) {
     });
   });
 
-  app.get('/cabinet', function(req, res, next) {
-    res.end('user\'s cabinet');
-  });
-
 };
