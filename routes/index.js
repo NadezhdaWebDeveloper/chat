@@ -7,6 +7,8 @@
 //   res.render('index', { title: 'Express' });
 // };
 
+var checkAuth = require('../middleware/checkAuth');
+
 module.exports = function(app) {
 
   app.get('/', function(req, res, next) { res.render('index'); });
@@ -18,7 +20,7 @@ module.exports = function(app) {
 
   app.post('/logout', require('./logout').post);
 
-  app.get('/chat', require('./chat').get);
+  app.get('/chat', checkAuth, require('./chat').get);
 
   app.get('/cabinet', function(req, res, next) { res.end('user\'s cabinet'); });
 
