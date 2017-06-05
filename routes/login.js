@@ -1,6 +1,7 @@
 var User = require('../models/user').User;
 var async = require('async');
 var HttpError = require('../error').HttpError;
+var AuthError = require('../models/user').AuthError;
 
 module.exports =  {
 
@@ -50,32 +51,46 @@ module.exports =  {
             // });
           */
 
-          // Реализация алгоритма за счет async.waterfall
-          async.waterfall([
-            function(callback) {
-              User.findOne({ username: username }, callback);
-            },
-            function(user, callback) {
-              if (user) {
-                if (user.checkPassword(password)) {
-                  callback(null, user);
+          /* Реализация алгоритма за счет async.waterfall
+            async.waterfall([
+              function(callback) {
+                User.findOne({ username: username }, callback);
+              },
+              function(user, callback) {
+                if (user) {
+                  if (user.checkPassword(password)) {
+                    callback(null, user);
+                  } else {
+                    next(new HttpError('403', 'Password is invalid'));
+                  }
                 } else {
-                  next(new HttpError('403', 'Password is invalid'));
-                }
-              } else {
-                var user = new User({
-                  username: username,
-                  password: password
-                });
+                  var user = new User({
+                    username: username,
+                    password: password
+                  });
 
-                user.save(function(err) {
-                  if (err) return next(err);
-                  callback(null, user);
-                });
+                  user.save(function(err) {
+                    if (err) return next(err);
+                    callback(null, user);
+                  });
+                }
+              }
+            ], function(err, user) {
+              if (err) return next(err);
+              req.session.user = user._id;
+              res.send({});
+            });
+          */
+
+          User.authorize(username, password, function(err, user) {
+            if (err) {
+              if (err instanceof AuthError) {
+                return next(new HttpError('403', err.message));
+              } else {
+                return next(err);
               }
             }
-          ], function(err, user) {
-            if (err) return next(err);
+
             req.session.user = user._id;
             res.send({});
           });

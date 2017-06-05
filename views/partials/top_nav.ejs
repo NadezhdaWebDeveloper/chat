@@ -1,9 +1,29 @@
-<nav class="topNav">
-  <ul class="topNav__part topNav__part_left">
-    <li class="topNav__item">Home</li>
+<nav class="topNav navbar navbar-default" role="navigation">
+  <ul class="topNav__part topNav__part_left nav navbar-nav">
+    <li class="topNav__item"><a href="/">Home</a></li>
+    <% if (user) { %>
+      <li class="topNav__item"><a href="/cabinet">Cabinet</a></li>
+      <li class="topNav__item"><a href="/chat">Chat</a></li>
+    <% } %>
   </ul>
-  <ul class="topNav__part topNav__part_right">
-    <li class="topNav__item">Log in</li>
-    <li class="topNav__item">Sign in</li>
+  <ul class="topNav__part topNav__part_right nav navbar-nav navbar-right">
+    <% if (user) { %>
+      <li class="topNav__item"><a href="" class="logOut_js">Log out</a></li>
+    <% } else { %>
+      <li class="topNav__item"><a href="/login">Log in</a></li>
+    <% } %>
   </ul>
 </nav>
+
+<script>
+
+  $('.logOut_js').click(function(event){
+    event.preventDefault();
+
+    var form = $('<form name="logoutForm" action="/logout" method="POST"></form>');
+    $(document.body).append(form);
+
+    $('form[name="logoutForm"]').submit();
+  });
+
+</script>
