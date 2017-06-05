@@ -33,13 +33,14 @@ app.use(express.bodyParser()); // req.body....
 
 app.use(express.cookieParser()); // req.headers
 
-var MongoStore = require('connect-mongo')(express);
+
+var sessionStore = require('./libs/sessionStore');
 
 app.use(express.session({
   secret: config.get('session:secret'),
   key: config.get('session:key'),
   cookie: config.get('session:cookie'),
-  store: new MongoStore({ mongooseConnection: mongoose.connection })
+  store: sessionStore
 }));
 // Как только пользователь заходит на сайт
 // ему устанавливается cookie - connect.sid - название по-умолчанию
