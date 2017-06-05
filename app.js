@@ -82,9 +82,19 @@ app.use(function(err, req, res, next) {
 });
 
 // Creating server
-http.createServer(app).listen(config.get('port'), function(){
+var server = http.createServer(app);
+server.listen(config.get('port'), function(){
   log.info('Express server listening on port ' + config.get('port'));
 });
 
-// app.get('/', routes.index);
-// app.get('/users', user.list);
+var io = require('socket.io').listen(server);
+
+io.sockets.on('connection', function(socket) {  // socket - объект, к-й связан с данным клиентом.
+                                                // Он может передавать ему сообщения методом emit
+  // socket.emit('news', { hello: 'world' });   // emit генерирует событие news c данными
+  socket.on('message', function(text, cb) {     // on слушает событие (получение сообщений/данных от клиента)
+    socket.broadcast.emit('message', text);     // такой вызов отправит сообщение всем подписаным соединениям кроме данного
+    cb(text);
+  });
+
+});
