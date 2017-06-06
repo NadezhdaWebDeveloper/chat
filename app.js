@@ -5,8 +5,6 @@ var config = require('./config');
 var log = require('./libs/log')(module);
 var mongoose = require('./libs/mongoose');
 var HttpError = require('./error').HttpError;
-// var routes = require('./routes');
-// var user = require('./routes/user');
 
 var app = express();
 
