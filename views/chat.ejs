@@ -5,11 +5,11 @@
 
 <h3>Hello, <%= user.get('username') %></h3>
 
-<div id="room">
+<div id="chatRoom">
   <div id="connectionStatus"></div>
   <div id="output"></div>
   <div id="feedback"></div>
-  <form>
+  <form name="chatForm">
     <input id="username" type="hidden" name="username" value="<%= user.get('username') %>">
     <input id="msg" type="text" name="msg" autocomplete="off" autofocus placeholder="Message">
   </form>
@@ -18,7 +18,7 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
 
-  var $form = $('#room form');
+  var $form = $('form[name="chatForm"]');
   var $output = $('#output');
   var $feedback = $('#feedback');
   var $msg = $('#msg');

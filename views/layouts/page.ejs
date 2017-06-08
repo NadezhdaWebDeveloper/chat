@@ -16,13 +16,17 @@
 </head>
 <body>
   <header>
-    <%- partial('../partials/top_nav') -%>
+    <div class="content">
+      <%- partial('../partials/top_nav') -%>
+    </div>
   </header>
   <section>
-    <%- body %>
+    <div class="content content_withIndents">
+      <%- body %>
+    </div>
   </section>
   <footer>
-
+    <div class="content"></div>
   </footer>
 </body>
 </html>

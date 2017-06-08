@@ -1,0 +1,19 @@
+.topNav{
+  display: flex;
+  justify-content: space-between;
+
+  .topNav__part{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+
+    .topNav__item{
+
+      .topNav__link{
+        padding: 1em;
+        display: inline-block;
+      }
+    }
+  }
+}

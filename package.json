@@ -32,7 +32,5 @@
     "socket.io": "^2.0.2",
     "winston": "^2.3.1"
   },
-  "devDependencies": {
-    "nodemon": "^1.11.0"
-  }
+  "devDependencies": {}
 }
