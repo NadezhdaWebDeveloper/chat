@@ -1,0 +1,60 @@
+.chatRoom{
+    max-width: 600px;
+    margin: $indent*2 auto;
+    border: 1px solid #ddd;
+    border-bottom: 0;
+    box-shadow: $shadow;
+    border-radius: 2px;
+
+    .chatRoom__header{
+      padding: $indent;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .chatRoom__title{
+        margin: 0;
+      }
+    }
+}
+
+#chatWindow{
+    height: 400px;
+    overflow: auto;
+    background: darken($color_white, 5);
+}
+
+#connectionStatus{
+  &.on{
+    .connectionStatus__indicator{
+      color: $color_success;
+    }
+  }
+
+  &.off{
+    .connectionStatus__indicator{
+      color: $color_error;
+    }
+  }
+
+  .connectionStatus__indicator{
+    color: $color_mainText;
+  }
+}
+
+#output p{
+    padding: $indent 0;
+    margin: 0 $indent;
+    border-bottom: 1px solid lighten($color_black, 90);
+    color: $color_mainText;
+}
+
+#feedback{
+    color: #aaa;
+    padding: $indent 0px;
+    margin: 0 $indent;
+}
+
+#output strong{
+    color: darken($color_accent, 10);
+}

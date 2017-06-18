@@ -1,3 +1,7 @@
+header{
+  background-color: $color_accent;
+}
+
 .topNav{
   display: flex;
   justify-content: space-between;
@@ -10,9 +14,18 @@
 
     .topNav__item{
 
+      &:hover{
+        background-color: darken($color_accent, 10);
+      }
+
       .topNav__link{
-        padding: 1em;
+        padding: $indent;
         display: inline-block;
+        color: $color_whiteText;
+
+        &:hover{
+          text-decoration: none;
+        }
       }
     }
   }

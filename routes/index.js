@@ -22,7 +22,7 @@ module.exports = function(app) {
 
   app.get('/chat', checkAuth, require('./chat').get);
 
-  app.get('/cabinet', function(req, res, next) { res.end('user\'s cabinet'); });
+  app.get('/profile', require('./profile').get);
 
   app.get('/forbidden', function(req, res, next) {
     next(new Error('Opps, denied!'));

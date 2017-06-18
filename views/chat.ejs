@@ -3,12 +3,20 @@
 
 <h1>Chat Page</h1>
 
-<h3>Hello, <%= user.get('username') %></h3>
+<!-- <h3>Hello, <%= user.get('username') %></h3> -->
 
-<div id="chatRoom">
-  <div id="connectionStatus"></div>
-  <div id="output"></div>
-  <div id="feedback"></div>
+<div id="chatRoom" class="chatRoom">
+  <div class="chatRoom__header">
+    <h3 class="chatRoom__title">Chat</h3>
+    <div id="connectionStatus">
+      <span class="connectionStatus__msg"></span>
+      <span class="connectionStatus__indicator"><i class="fa fa-rss" aria-hidden="true"></i></span>
+    </div>
+  </div>
+  <div id="chatWindow">
+    <div id="output"></div>
+    <div id="feedback"></div>
+  </div>
   <form name="chatForm">
     <input id="username" type="hidden" name="username" value="<%= user.get('username') %>">
     <input id="msg" type="text" name="msg" autocomplete="off" autofocus placeholder="Message">
@@ -37,19 +45,25 @@
       printMessage(data);
     })
     .on('connect', function() {
-      printStatus('Connection established');
+      socket.emit('addme', $username.val());
+      printStatus(true, 'Connection established');
       $form.on('submit', sendMessage);
       $msg.on('keypress', typingMessage);
       $msg.prop('disabled', false);
     })
     .on('disconnect', function() {
-      printStatus('Connection lost');
+      printStatus(false, 'Connection lost');
       $form.off('submit', sendMessage);
       $msg.prop('disabled', true);
     })
     .on('reconnect_failed', function() {
-      printStatus('Oh, Nooo!!!');
+      printStatus(false, 'Try again later!');
     });
+
+  socket.on('chat', function(username, data) {
+    $('<p>', { html:  '<strong>' + username + '</strong> ' + data }).appendTo($output);
+    return false;
+  });
 
   socket.on('typing', function(data) {
     $feedback.html('<em>' + data + ' typing a message...</em>');
@@ -82,8 +96,14 @@
     return false;
   }
 
-  function printStatus(status) {
-    $('#connectionStatus').text(status);
+  function printStatus(status, message) {
+    $('#connectionStatus .connectionStatus__msg').text(message)
+
+    if (status) {
+      $('#connectionStatus').addClass('on');
+    } else {
+      $('#connectionStatus').addClass('off');
+    }
     return false;
   }
 

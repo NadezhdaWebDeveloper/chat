@@ -21,6 +21,12 @@ module.exports = function(server) {
 
   io.on('connection', function(socket) {
 
+    socket.on('addme', function(username){
+      socket.username = username;
+      socket.emit('chat', 'SERVER', 'You have connected');
+      socket.broadcast.emit('chat', 'SERVER', username + ' is on desk');
+    });
+
     socket.on('message', function(data){
       io.sockets.emit('message', data);
     });
@@ -29,7 +35,10 @@ module.exports = function(server) {
       socket.broadcast.emit('typing', data);
     });
 
-  });
+    socket.on('disconnect', function(){
+      io.sockets.emit('chat', 'SERVER', socket.username + ' has left the chat');
+    });
 
+  });
 
 };
