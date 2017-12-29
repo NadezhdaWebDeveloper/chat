@@ -3,9 +3,7 @@ var http = require('http');
 var path = require('path');
 var config = require('./config');
 var log = require('./libs/log')(module);
-var mongoose = require('./libs/mongoose');
 var HttpError = require('./error').HttpError;
-
 var app = express();
 
 // Middleware
@@ -18,8 +16,10 @@ app.engine('ejs', require('ejs-locals')); // layout partial block
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
+
 // all environments
 app.use(express.favicon()); // /favicon.ico
+
 
 if (app.get('env') == 'development') {
   app.use(express.logger('dev'));
